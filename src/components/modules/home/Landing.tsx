@@ -1,5 +1,6 @@
-import { SearchIcon } from '@/src/components/icons';
 import { Input } from '@nextui-org/input';
+
+import { SearchIcon } from '@/src/components/icons';
 
 const Landing = () => {
   return (

@@ -3,6 +3,7 @@
 import FXForm from '@/src/components/form/FXForm';
 import FXInput from '@/src/components/form/FXInput';
 import { useUserRegistration } from '@/src/hooks/auth.hook';
+import registerValidationSchema from '@/src/schemas/register.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
@@ -37,7 +38,7 @@ const RegisterPage = () => {
             mobileNumber: '01611223344',
             password: '123456',
           }}
-          // resolver={zodResolver(registerValidationSchema)}
+          resolver={zodResolver(registerValidationSchema)}
           onSubmit={onSubmit}
         >
           <div className="py-3">

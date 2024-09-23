@@ -16,12 +16,15 @@ import clsx from 'clsx';
 
 import { siteConfig } from '@/src/config/site';
 import { ThemeSwitch } from '@/src/components/UI/theme-switch';
-import { Logo } from '@/src/components/icons';
+import { Logo } from '@/src/assets/icons';
 import NavbarDropdown from '@/src/components/UI/NavbarDropdown';
 import { useUser } from '@/src/context/user.provider';
+import { Button } from '@nextui-org/button';
+import { useRouter } from 'next/navigation';
 
 export const Navbar = () => {
   const { user } = useUser();
+  const router = useRouter();
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -59,7 +62,9 @@ export const Navbar = () => {
             <NavbarDropdown />
           </NavbarItem>
         ) : (
-          <Link href="/login">Login</Link>
+          <NavbarItem className="hidden sm:flex gap-2">
+            <Button onClick={() => router.push('/login')}>Login</Button>
+          </NavbarItem>
         )}
       </NavbarContent>
 

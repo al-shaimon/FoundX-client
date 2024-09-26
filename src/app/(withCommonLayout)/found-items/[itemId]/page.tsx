@@ -1,18 +1,25 @@
 import Container from '@/src/components/UI/Container';
 import Post from '@/src/components/UI/Post';
 import axiosInstance from '@/src/lib/AxiosInstance';
+import { getPost } from '@/src/services/post';
 import { IPost } from '@/src/types';
 
-const FoundItems = async () => {
-  const { data } = await axiosInstance.get(`/items`);
+interface IProps {
+  params: {
+    itemId: string;
+  };
+}
+
+const ItemDetailPage = async ({ params: { itemId } }: IProps) => {
+  const { data: post } = await getPost(itemId);
 
   return (
     <Container>
       <div className="mx-auto my-3 max-w-[720px]">
-        {data?.data?.map((post: IPost) => <Post key={post?._id} post={post} />)}
+        <Post key={post?._id} post={post} />
       </div>
     </Container>
   );
 };
 
-export default FoundItems;
+export default ItemDetailPage;

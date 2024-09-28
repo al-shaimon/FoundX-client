@@ -1,8 +1,11 @@
 'use server';
 
+import { revalidateTag } from 'next/cache';
+
+import { getCurrentUser } from '../AuthService';
+
 import envConfig from '@/src/config/envConfig';
 import axiosInstance from '@/src/lib/AxiosInstance';
-import { revalidateTag } from 'next/cache';
 
 export const createPost = async (formData: FormData): Promise<any> => {
   try {
@@ -16,6 +19,7 @@ export const createPost = async (formData: FormData): Promise<any> => {
 
     return data;
   } catch (error) {
+    console.log(error);
     throw new Error('Failed to create post');
   }
 };
@@ -34,4 +38,12 @@ export const getPost = async (postId: string) => {
   }
 
   return res.json();
+};
+
+export const getMyPosts = async () => {
+  const user = await getCurrentUser();
+
+  const res = await axiosInstance.get(`/items?user=${user?._id}`);
+
+  return res.data;
 };

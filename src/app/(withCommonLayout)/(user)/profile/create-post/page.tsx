@@ -1,22 +1,24 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client';
 
-import FXInput from '@/src/components/form/FXInput';
 import { Divider } from '@nextui-org/divider';
 import { Button } from '@nextui-org/button';
 import { FieldValues, FormProvider, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { allDistict } from '@bangladeshi/bangladesh-address';
+import { ChangeEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import FXInput from '@/src/components/form/FXInput';
 import FXDatePicker from '@/src/components/form/FXDatePicker';
 import dateToISO from '@/src/utils/dateToISO';
 import FXSelect from '@/src/components/form/FXSelect';
-import { allDistict } from '@bangladeshi/bangladesh-address';
 import { useGetCategories } from '@/src/hooks/categories.hook';
-import { ChangeEvent, useState } from 'react';
+import FXTextarea from '@/src/components/form/FXTextArea';
+import { AddIcon, TrashIcon } from '@/src/assets/icons';
 import { useUser } from '@/src/context/user.provider';
 import { useCreatePost } from '@/src/hooks/post.hook';
-import { useRouter } from 'next/navigation';
 import Loading from '@/src/components/UI/Loading';
-import { AddIcon, TrashIcon } from '@/src/assets/icons';
-import FXTextarea from '@/src/components/form/FXTextArea';
+import generateDescription from '@/src/services/ImageDescription';
 
 const cityOptions = allDistict()
   .sort()
@@ -30,6 +32,8 @@ const cityOptions = allDistict()
 const createPost = () => {
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
   const [imagePreviews, setImagePreviews] = useState<string[] | []>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const router = useRouter();
 
@@ -97,6 +101,23 @@ const createPost = () => {
       };
 
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDescriptionGeneration = async () => {
+    setIsLoading(true);
+    try {
+      const response = await generateDescription(
+        imagePreviews[0],
+        "write a description for social media post describing the given image that starts with 'Found this...'"
+      );
+
+      methods.setValue('description', response);
+      setIsLoading(false);
+    } catch (error: any) {
+      console.error(error);
+      setError(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -175,6 +196,19 @@ const createPost = () => {
               <div className="min-w-fit flex-1">
                 <FXTextarea label="Description" name="description" />
               </div>
+            </div>
+
+            <div className="flex justify-end gap-5">
+              {methods.getValues('description') && (
+                <Button onClick={() => methods.resetField('description')}>Clear</Button>
+              )}
+              <Button
+                isDisabled={imagePreviews.length > 0 ? false : true}
+                isLoading={isLoading}
+                onClick={() => handleDescriptionGeneration()}
+              >
+                {isLoading ? 'Generating....' : 'Generate with AI'}
+              </Button>
             </div>
 
             <Divider className="my-5" />

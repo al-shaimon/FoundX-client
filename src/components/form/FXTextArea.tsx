@@ -1,5 +1,5 @@
 import { Textarea } from '@nextui-org/input';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { IInput } from '@/src/types';
 
@@ -13,5 +13,15 @@ export default function FXTextarea({ name, label, variant = 'bordered' }: IProps
     formState: { errors },
   } = useFormContext();
 
-  return <Textarea {...register(name)} label={label} minRows={6} variant={variant} />;
+  const currentValue = useWatch({ name });
+
+  return (
+    <Textarea
+      {...register(name)}
+      label={label}
+      minRows={6}
+      value={currentValue || ''}
+      variant={variant}
+    />
+  );
 }

@@ -1,8 +1,20 @@
-const profile = () => {
+import Post from '@/src/components/UI/Post';
+import { getMyPosts } from '@/src/services/post';
+import { IPost } from '@/src/types';
+
+const profile = async () => {
+  const { data } = await getMyPosts();
+
   return (
-    <div>
-      <h1>This is profile page</h1>
-    </div>
+    <>
+      {data?.length ? (
+        data?.map((post: IPost) => <Post key={post._id} post={post} />)
+      ) : (
+        <div className="flex min-h-screen w-full items-center justify-center rounded-md bg-default-100">
+          <h1 className="text-4xl">No Post Found!</h1>
+        </div>
+      )}
+    </>
   );
 };
 

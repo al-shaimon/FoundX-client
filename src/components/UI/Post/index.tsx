@@ -7,6 +7,8 @@ import { useUser } from '@/src/context/user.provider';
 import { IPost, IUser } from '@/src/types';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
+import { format } from 'date-fns';
+import { Calendar, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
 interface IProps {
@@ -40,13 +42,13 @@ const Post = ({ post }: IProps) => {
                 <h1 className="cursor-pointer text-2xl">{title}</h1>
               </Link>
               <p className="flex items-center gap-1 text-xs">
-                {/* Found on: <Calendar width={14} />
-                {format(new Date(dateFound), 'dd MMM, yyyy')} */}
+                Found on: <Calendar width={14} />
+                {format(new Date(dateFound), 'dd MMM, yyyy')}
               </p>
             </div>
             <div>
               <p className="flex items-center gap-1">
-                {/* <MapPin width={18} /> */}
+                <MapPin width={18} />
                 {location}, {city}
               </p>
             </div>

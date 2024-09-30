@@ -1,8 +1,6 @@
 import Container from '@/src/components/UI/Container';
 import Post from '@/src/components/UI/Post';
-import axiosInstance from '@/src/lib/AxiosInstance';
 import { getPost } from '@/src/services/post';
-import { IPost } from '@/src/types';
 
 interface IProps {
   params: {
